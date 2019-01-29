@@ -1,4 +1,4 @@
-<h2>Results page</h2>
-@foreach ($weekDays as $day)
-    {{ $day }}
-@endforeach
+@extends('layouts.app')
+@section('content')
+@include('includes.schedule')
+@endsection

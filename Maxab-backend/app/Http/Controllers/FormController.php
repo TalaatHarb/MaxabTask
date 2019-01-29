@@ -11,7 +11,7 @@ class FormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function submit()
+    public function submit(Request $request)
     {
         // $this->validate($request, [
         //     'title' => 'required',
@@ -22,10 +22,11 @@ class FormController extends Controller
         //     'enddate'
         // ]);
         $data = array(
+            'weekDays' => $request->input('weekDays'),
             'success' => 'Calculations successful'
         );
         
-        return redirect("{{url('/results')}}")->with($data);
+        return view("pages.results")->with($data);
     }
 
     

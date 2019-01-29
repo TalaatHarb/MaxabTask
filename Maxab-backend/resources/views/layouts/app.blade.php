@@ -18,9 +18,9 @@
     </head>
     <body>
         @include('includes.navbar')
-        <div id="wrapper">       
+        <div id="wrapper p-0">       
             <div id="content-wrapper">
-                <div class="container-fluid">
+                <div>
                     @include('includes.messages')
                     <!-- Page Content -->
                     @yield('content')

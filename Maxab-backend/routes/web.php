@@ -15,8 +15,4 @@ Route::get('/', function () {
     return view('pages.index');
 });
 
-Route::post('/', 'FormController@submit');
-
-Route::get('/results', function () {
-    return view('pages.results');
-});
+Route::post('/results', 'FormController@submit');

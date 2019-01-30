@@ -13,10 +13,11 @@
                         <h5 class="text-success">Number of sessions per week: {{count($weekDays)}}</h5>
                         <h5 class="text-primary">Choosen days: 
                             @foreach ($weekDays as $day)
-                                {{ $day }}
+                                <span class="text-dark">{{ $day }}</span>
                             @endforeach
                         </h5>
                         <h5 class="text-success">Sessions per chapter: {{$sessionsPerChapter}}</h5>
+                        <h5 class="text-primary">Total number of sessions: {{$sessionsCount}}</h5>
                     </div>
                 <div class="col-md-2">
                     <img src="{{asset('images/books003.jpg')}}" alt="books" class="rounded">
@@ -43,7 +44,7 @@
 			            <tbody>
 			                @foreach ($scheduledSessions as $sSession)
                                 <tr>
-				                    <th>1</th>
+				                    <th>{{$sSession['number']}}</th>
                                     <th class="text-center">{{$sSession['date']}}</th>
                                     <th class="text-center">{{$sSession['chapter']}}</th>
                                 </tr>

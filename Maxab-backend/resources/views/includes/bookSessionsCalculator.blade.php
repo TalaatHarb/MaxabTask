@@ -1,10 +1,5 @@
 <div 
-    class="jumbotron p-2 mb-0" 
-    style="background-image: url('{{asset('images/books001.jpg')}}');
-    background-size: cover;
-    background-color: rgba(255,255,255,0.9);
-    background-blend-mode: lighten;"
-    >
+    class="jumbotron p-2 mb-0 books-background">
     <h3>Book sessions calculator</h3>
     <br>
 		<div class="row">
@@ -13,8 +8,7 @@
 				<p>A student is required to finish a book of thirty chapters, he is allowed to
                         choose when he starts(Starting date), days he will be attending every 
                         week( Week days for sessions) and the number of sessions for each chapter</p>
-                <img src="{{asset('images/books002.jpg')}}" alt="books" style="width: 100%;
-                opacity: 0.5;" class="rounded">
+                <img src="{{asset('images/books002.jpg')}}" alt="books" class="rounded">
 			</div>
 			<div class="col-md-8">
                     {!! Form::open(['action' => 'FormController@submit', 'method', 'POST']) !!}

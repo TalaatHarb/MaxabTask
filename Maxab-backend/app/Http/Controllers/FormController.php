@@ -21,11 +21,11 @@ class FormController extends Controller
         ]);
 
         // TODO: perform calculations
-        $scheduledSessions = [array('date' => date('d/m/Y'), 'chapter' => '1'),
-                            array('date' => date('d/m/Y'), 'chapter' => '2')];
-        
+        $scheduledSessions = [array('date' => date('l jS \of F Y'), 'chapter' => '1'),
+                            array('date' => date('l jS \of F Y'), 'chapter' => '2')];
+        // {{ \Carbon\Carbon::parse($user->from_date)->format('d/m/Y')}}
         $data = array(
-            'startDate' => $request->input('startDate'),
+            'startDate' =>date('l jS \of F Y', strtotime($request->input('startDate'))),
             'weekDays' => $request->input('weekDays'),
             'sessionsPerChapter' => $request->input('sessionsPerChapter'),
             'success' => 'Calculations successful',

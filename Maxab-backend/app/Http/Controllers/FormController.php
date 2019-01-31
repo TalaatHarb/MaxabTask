@@ -17,11 +17,10 @@ class FormController extends Controller
      */
     public function submit(Request $request)
     {
-        // TODO: Add better validation
         $this->validate($request, [
             'startDate' => 'required',
-            'weekDays' => 'required',
-            'sessionsPerChapter' => 'required',
+            'weekDays' => 'required|array',
+            'sessionsPerChapter' => 'required|Integer|gt:0',
         ]);
 
         
@@ -30,8 +29,6 @@ class FormController extends Controller
         $weekDays = FormController::mapdates($weekDaysArray);
         $sessionsPerChapter = $request->input('sessionsPerChapter');
 
-
-        // TODO: perform calculations
         $scheduledSessions = FormController::schedule($startDate, $weekDaysArray, $sessionsPerChapter);
 
         // Possible improvement for readability: use Carbon
@@ -102,7 +99,8 @@ class FormController extends Controller
         while($i < $sessionsCount){
             array_push($scheduledSessions, 
             array('number' => ($i+1),
-             'date' => $dates[$i]->format('l, jS \of F Y'),
+             'weekDay' => $dates[$i]->format('l'),
+             'date' => $dates[$i]->format('jS \of F Y'),
              'chapter' =>((int) ($i / $sessionsPerChapter + 1))));
              $i++;
         }

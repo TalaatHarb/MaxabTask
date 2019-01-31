@@ -37,14 +37,16 @@
                 <div class="container">
 		            <table class="table table-striped table-hover table-bordered">
 			            <thead>
-				            <th>Session No.</th>
+                            <th>Session No.</th>
+                            <th class="text-center">Week day</th>
                             <th class="text-center">Date</th>
                             <th class="text-center">Chapter</th>
 			            </thead>
 			            <tbody>
 			                @foreach ($scheduledSessions as $sSession)
                                 <tr>
-				                    <th>{{$sSession['number']}}</th>
+                                    <th>{{$sSession['number']}}</th>
+                                    <th class="text-center">{{$sSession['weekDay']}}</th>
                                     <th class="text-center">{{$sSession['date']}}</th>
                                     <th class="text-center">{{$sSession['chapter']}}</th>
                                 </tr>

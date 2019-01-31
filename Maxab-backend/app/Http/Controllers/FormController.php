@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use DateTime;
+use DatePeriod;
+use DateInterval;
 
 class FormController extends Controller
 {
@@ -21,24 +24,29 @@ class FormController extends Controller
             'sessionsPerChapter' => 'required',
         ]);
 
-        // TODO: perform calculations
-        $weekDays = FormController::mapdates($request->input('weekDays'));
+        
+        $startDate = new DateTime($request->input('startDate'));
+        $weekDaysArray = $request->input('weekDays');
+        $weekDays = FormController::mapdates($weekDaysArray);
+        $sessionsPerChapter = $request->input('sessionsPerChapter');
 
-        $scheduledSessions = FormController::schedule($weekDays);
+
+        // TODO: perform calculations
+        $scheduledSessions = FormController::schedule($startDate, $weekDaysArray, $sessionsPerChapter);
+
+        // Possible improvement for readability: use Carbon
         // {{ \Carbon\Carbon::parse($user->from_date)->format('d/m/Y')}}
         
         $data = array(
-            'startDate' =>date('l jS \of F Y', strtotime($request->input('startDate'))),
+            'startDate' => $startDate->format('l, jS \of F Y'),
             'weekDays' => $weekDays,
-            'sessionsPerChapter' => $request->input('sessionsPerChapter'),
-            'success' => 'Calculations successful',
+            'sessionsPerChapter' => $sessionsPerChapter,
             'scheduledSessions' => $scheduledSessions,
-            'sessionsCount' => ((int)$request->input('sessionsPerChapter'))*30,
         );
         
         return view("pages.results")->with($data);
     }
-
+ 
     // TODO: Move private static functions to a provider
 
     /**
@@ -51,7 +59,7 @@ class FormController extends Controller
         
         return array_map(
             function($day) {
-            $weekDaysMap = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+                static $weekDaysMap = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
             return $weekDaysMap[(int) $day];
         }, $weekDaysArray);
     }
@@ -59,12 +67,46 @@ class FormController extends Controller
     /**
      * Create schedule for student
      * 
-     * @param array $weekDaysArray
+     * @param date $startDate
+     * @param array $weekDays
+     * @param
      * @return array 
      */
-    private static function schedule($weekDaysArray){
-        return [array('number' => 1, 'date' => date('l jS \of F Y'), 'chapter' => '1'),
-        array('number' => 2, 'date' => date('l jS \of F Y'), 'chapter' => '2')];
+    private static function schedule($startDate, $weekDays, $sessionsPerChapter){
+        $sessionsCount = ((int)$sessionsPerChapter)*30;
+        $scheduledSessions = [];
+        $i = 0;
+        $weekDaysArray = FormController::mapdates($weekDays);
+        
+        // TODO: Split solution by filtering to multiple functions
+        $dates = array_slice(
+                    array_filter(
+                    iterator_to_array(
+                        new DatePeriod(
+                            $startDate,
+                            new DateInterval('P1D'),
+                            (new DateTime(
+                                $startDate->format('d-m-Y')
+                                ))->modify(
+                                    ' + ' . ((int)($sessionsCount * 7 / count($weekDays) + 7)) . ' days'))), 
+                                    function ($date) use($weekDaysArray){
+                                        foreach($weekDaysArray as $day){
+                                            if($date->format('l') == $day){
+                                                return true;
+                                            }
+                                        }
+                                        return false;
+                                    })
+                                    , 0, $sessionsCount);
+
+        while($i < $sessionsCount){
+            array_push($scheduledSessions, 
+            array('number' => ($i+1),
+             'date' => $dates[$i]->format('l, jS \of F Y'),
+             'chapter' =>((int) ($i / $sessionsPerChapter + 1))));
+             $i++;
+        }
+        return $scheduledSessions;
     }
     
 }

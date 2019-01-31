@@ -18,7 +18,7 @@ class FormController extends Controller
     public function submit(Request $request)
     {
         $this->validate($request, [
-            'startDate' => 'required',
+            'startDate' => 'required|date',
             'weekDays' => 'required|array',
             'sessionsPerChapter' => 'required|Integer|gt:0',
         ]);

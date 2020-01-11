@@ -14,38 +14,25 @@
                     {!! Form::open(['action' => 'FormController@submit', 'method', 'POST']) !!}
                     <div class="form-group">
                         {{Form::Label('startDate', 'Starting date', ['class' => 'font-weight-bold'])}}
-                        {{Form::date('startDate', '', ['class' => 'form-control', 'placeholder' => 'Starting Date'])}}
+                        {{Form::date('startDate', old("startDate"), ['class' => 'form-control', 'placeholder' => 'Starting Date'])}}
                     </div>
                     <div class="form-group">
                         <label class="font-weight-bold">Week days for sessions</label>
-                        <label class="checkbox-container">Saturday
-                            <input name="weekDays[0]" value="0" type="checkbox" checked>
+                        @php($weekdays=[
+                            0=>"Saturday",
+                            1=>"Sunday",
+                            2=>"Monday",
+                            3=>"Tuesday",
+                            4=>"Wednesday",
+                            5=>"Thursday",
+                            6=>"Friday",
+                        ])
+                        @for($i=0;$i<7;$i++)
+                        <label class="checkbox-container">{{$weekdays[$i]}}
+                            <input name="weekDays[{{$i}}]" value="{{$i}}" type="checkbox" {{(old("weekDays.".$i)??-1)==$i?"checked=\"checked\"":""}}>
                             <span class="checkmark"></span>
                         </label>
-                        <label class="checkbox-container">Sunday
-                            <input name="weekDays[1]" value="1" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="checkbox-container">Monday
-                            <input name="weekDays[2]" value="2" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="checkbox-container">Tuesday
-                            <input name="weekDays[3]" value="3" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="checkbox-container">Wednesday
-                            <input name="weekDays[4]" value="4" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="checkbox-container">Thursday
-                            <input name="weekDays[5]" value="5" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="checkbox-container">Friday
-                            <input name="weekDays[6]" value="6" type="checkbox" checked>
-                            <span class="checkmark"></span>
-                        </label>
+                        @endfor
                     </div>
                     <div class="form-group">
                             {{Form::Label('sessionsPerChapter', 'Sessions per chapter', ['class' => 'font-weight-bold'])}}
